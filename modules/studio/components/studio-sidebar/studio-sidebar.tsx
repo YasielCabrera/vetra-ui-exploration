@@ -213,10 +213,7 @@ function SidebarPanel({
             <SidebarMenu>
               {NAV_ITEMS.map((item) => {
                 const Icon = NAV_ICONS[item.icon]
-                const active =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href)
+                const active = pathname.startsWith(item.href)
 
                 return (
                   <SidebarMenuItem key={item.title}>
