@@ -153,3 +153,53 @@
 .animate-stream-in {
   animation: stream-fade-in 0.28s ease-out both;
 }
+
+/* Soft mesh gradient for the home prompt — brand green + cool neutrals */
+.home-prompt-mesh {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 15% 20%,
+      color-mix(in oklab, var(--primary) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 55% at 85% 15%,
+      color-mix(in oklab, #6b8cae 10%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 75% 60% at 75% 85%,
+      color-mix(in oklab, var(--primary) 10%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 20% 80%,
+      color-mix(in oklab, #4f596f 8%, transparent),
+      transparent 65%
+    );
+}
+
+.dark .home-prompt-mesh {
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 15% 20%,
+      color-mix(in oklab, var(--primary) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 55% at 85% 15%,
+      color-mix(in oklab, #6b8cae 12%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 75% 60% at 75% 85%,
+      color-mix(in oklab, var(--primary) 12%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 20% 80%,
+      color-mix(in oklab, #4f596f 14%, transparent),
+      transparent 65%
+    );
+}

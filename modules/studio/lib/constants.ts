@@ -133,13 +133,13 @@ export const FEATURE_COLUMNS = [
     title: "Ideate",
     icon: "lightbulb",
     description:
-      "Describe the product you need in plain language. Vetra understands your intent and sets up the workflow — document models, editors, and drive apps.",
+      "Describe the Powerhouse product you need in plain language. Vetra understands your intent and sets up the workflow — document models, editors, and drive apps.",
   },
   {
     title: "Build",
     icon: "blocks",
     description:
-      "Specification-driven AI generates TypeScript packages on an open data layer with GraphQL APIs, real-time sync, and Git-like version history.",
+      "Specification-driven AI generates TypeScript packages on the Powerhouse stack — open data layer, GraphQL APIs, real-time sync, and Git-like version history.",
   },
   {
     title: "Own",
