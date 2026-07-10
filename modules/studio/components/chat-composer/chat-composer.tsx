@@ -114,7 +114,7 @@ export function ChatComposer({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card shadow-sm",
+        "min-w-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm",
         className,
       )}
     >
@@ -132,8 +132,8 @@ export function ChatComposer({
           }
         }}
       />
-      <div className="flex items-center justify-between gap-2 px-3 py-3">
-        <div className="flex items-center gap-0.5">
+      <div className="flex min-w-0 items-center gap-2 px-3 py-3">
+        <div className="flex shrink-0 items-center gap-0.5">
           <Button
             type="button"
             variant="ghost"
@@ -145,58 +145,62 @@ export function ChatComposer({
           </Button>
           {toolbarStart}
         </div>
-        <div className="flex items-center gap-2">
-          <Select
-            value={productId}
-            onValueChange={onProductChange}
-            disabled={selectDisabled}
-          >
-            <SelectTrigger
-              size="sm"
-              className="max-w-56"
-              aria-label="Product"
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+          <div className="min-w-0 max-w-56">
+            <Select
+              value={productId}
+              onValueChange={onProductChange}
+              disabled={selectDisabled}
             >
-              <SelectValue
-                placeholder="New Product"
-                aria-label={
-                  productId === NEW_PRODUCT_VALUE
-                    ? "New Product"
-                    : selectedProduct?.name
-                }
+              <SelectTrigger
+                size="sm"
+                className="w-full min-w-0 overflow-hidden *:data-[slot=select-value]:min-w-0"
+                aria-label="Product"
               >
-                {productId === NEW_PRODUCT_VALUE ? (
-                  <NewProductLabel compact />
-                ) : (
-                  (selectedProduct?.name ?? "Product")
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent
-              position="popper"
-              align="end"
-              className="min-w-[16rem]"
-            >
-              <SelectItem
-                value={NEW_PRODUCT_VALUE}
-                className="items-start py-2 pr-8"
+                <SelectValue
+                  placeholder="New Product"
+                  aria-label={
+                    productId === NEW_PRODUCT_VALUE
+                      ? "New Product"
+                      : selectedProduct?.name
+                  }
+                >
+                  {productId === NEW_PRODUCT_VALUE ? (
+                    <NewProductLabel compact />
+                  ) : (
+                    <span className="truncate">
+                      {selectedProduct?.name ?? "Product"}
+                    </span>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent
+                position="popper"
+                align="end"
+                className="min-w-[16rem]"
               >
-                <NewProductLabel />
-              </SelectItem>
-              {products.length > 0 ? (
-                <>
-                  <SelectSeparator />
-                  <SelectGroup>
-                    <SelectLabel>Existing products</SelectLabel>
-                    {products.map((product) => (
-                      <SelectItem key={product.id} value={product.id}>
-                        {product.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </>
-              ) : null}
-            </SelectContent>
-          </Select>
+                <SelectItem
+                  value={NEW_PRODUCT_VALUE}
+                  className="items-start py-2 pr-8"
+                >
+                  <NewProductLabel />
+                </SelectItem>
+                {products.length > 0 ? (
+                  <>
+                    <SelectSeparator />
+                    <SelectGroup>
+                      <SelectLabel>Existing products</SelectLabel>
+                      {products.map((product) => (
+                        <SelectItem key={product.id} value={product.id}>
+                          {product.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </>
+                ) : null}
+              </SelectContent>
+            </Select>
+          </div>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -207,6 +211,7 @@ export function ChatComposer({
                 aria-pressed={autoFollowAgent}
                 onClick={handleAutoFollowToggle}
                 className={cn(
+                  "shrink-0",
                   autoFollowAgent
                     ? "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
                     : "text-muted-foreground",
@@ -223,7 +228,7 @@ export function ChatComposer({
             disabled={disabled || !value.trim()}
             onClick={handleSubmit}
             aria-label="Send message"
-            className="rounded-full"
+            className="shrink-0 rounded-full"
           >
             <ArrowUpIcon />
           </Button>

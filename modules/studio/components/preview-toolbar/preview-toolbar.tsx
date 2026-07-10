@@ -88,24 +88,30 @@ export function PreviewToolbar({
   return (
     <div
       className={cn(
-        "grid h-10 shrink-0 grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-border bg-muted/40 px-2",
+        "@container flex h-10 shrink-0 items-center gap-1 overflow-hidden border-b border-border bg-muted/40 px-1.5 @[420px]:gap-2 @[420px]:px-2",
         className,
       )}
     >
-      <div className="flex min-w-0 items-center justify-self-start gap-0.5">
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground"
-        >
-          <SquareMousePointerIcon data-icon="inline-start" />
-          Edit
-        </Button>
+      <div className="flex shrink-0 items-center gap-0.5">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              aria-label="Edit"
+              className="px-1.5 text-muted-foreground @[480px]:px-2.5"
+            >
+              <SquareMousePointerIcon data-icon="inline-start" />
+              <span className="hidden @[480px]:inline">Edit</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Edit</TooltipContent>
+        </Tooltip>
 
         <Separator
           orientation="vertical"
-          className="mx-1.5 h-4 self-center data-vertical:self-center"
+          className="mx-0.5 h-4 self-center data-vertical:self-center @[420px]:mx-1.5"
         />
 
         <Tooltip>
@@ -124,7 +130,7 @@ export function PreviewToolbar({
         </Tooltip>
       </div>
 
-      <div className="flex h-8 w-[250px] items-center rounded-full bg-secondary px-1">
+      <div className="mx-auto flex h-8 min-w-0 max-w-[250px] flex-1 items-center rounded-full bg-secondary px-0.5 @[360px]:px-1">
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -132,7 +138,7 @@ export function PreviewToolbar({
               variant="ghost"
               size="icon-xs"
               aria-label="Refresh preview"
-              className="rounded-full text-muted-foreground"
+              className="shrink-0 rounded-full text-muted-foreground"
               onClick={onRefresh}
             >
               <RefreshCwIcon />
@@ -147,10 +153,10 @@ export function PreviewToolbar({
               type="button"
               variant="ghost"
               size="sm"
-              className="h-7 min-w-0 flex-1 justify-between rounded-full px-3 text-muted-foreground"
+              className="h-7 min-w-0 flex-1 justify-between gap-1 rounded-full px-2 text-muted-foreground @[360px]:px-3"
             >
-              {currentPage}
-              <ChevronDownIcon data-icon="inline-end" />
+              <span className="truncate">{currentPage}</span>
+              <ChevronDownIcon data-icon="inline-end" className="shrink-0" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center" className="min-w-36">
@@ -168,7 +174,7 @@ export function PreviewToolbar({
         </DropdownMenu>
       </div>
 
-      <div className="flex min-w-0 items-center justify-self-end gap-1.5">
+      <div className="flex shrink-0 items-center gap-0.5 @[420px]:gap-1.5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -176,10 +182,13 @@ export function PreviewToolbar({
               variant="ghost"
               size="sm"
               aria-label={`Device: ${DEVICE_LABELS[currentDevice]}`}
-              className="gap-1 text-muted-foreground"
+              className="gap-0.5 px-1.5 text-muted-foreground @[360px]:gap-1 @[360px]:px-2.5"
             >
               <DeviceIcon />
-              <ChevronDownIcon data-icon="inline-end" />
+              <ChevronDownIcon
+                data-icon="inline-end"
+                className="hidden @[360px]:block"
+              />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-36">
@@ -207,7 +216,7 @@ export function PreviewToolbar({
 
         <Separator
           orientation="vertical"
-          className="mx-0.5 h-4 self-center data-vertical:self-center"
+          className="mx-0.5 hidden h-4 self-center data-vertical:self-center @[360px]:block"
         />
 
         <Tooltip>

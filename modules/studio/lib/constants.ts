@@ -1,11 +1,13 @@
 import type { Integration } from "@/modules/studio/types"
 
-export const STUDIO_STORAGE_KEY = "vetra-studio-sessions-v3"
+export const STUDIO_STORAGE_KEY = "vetra-studio-sessions-v4"
 export const PRODUCTS_STORAGE_KEY = "vetra-studio-products-v2"
 export const SESSION_PANEL_LAYOUT_KEY = "vetra-studio-session-panel-layout-v1"
 export const CODE_EDITOR_PANEL_LAYOUT_KEY = "vetra-studio-code-editor-layout-v1"
 export const AUTO_FOLLOW_AGENT_KEY = "vetra-studio-auto-follow-agent-v1"
+export const RECENT_CHATS_PREFS_KEY = "vetra-studio-recent-chats-prefs-v1"
 export const DEFAULT_AUTO_FOLLOW_AGENT = true
+export const DEFAULT_RECENT_CHATS_VIEW = "recent" as const
 
 /** Sentinel value for the product select — creates a new product on submit. */
 export const NEW_PRODUCT_VALUE = "new"
@@ -36,11 +38,6 @@ export const NAV_ITEMS = [
     title: "Integrations",
     href: "/integrations",
     icon: "plug",
-  },
-  {
-    title: "Vetra Cloud",
-    href: "/cloud",
-    icon: "cloud",
   },
 ] as const
 

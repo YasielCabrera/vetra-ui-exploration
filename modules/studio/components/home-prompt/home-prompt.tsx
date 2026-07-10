@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { ChatComposer } from "@/modules/studio/components/chat-composer"
 import { FeatureColumns } from "@/modules/studio/components/feature-columns"
@@ -10,8 +10,23 @@ import { useStudio } from "@/modules/studio/providers"
 
 export function HomePrompt() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { createSession, products } = useStudio()
-  const [productId, setProductId] = React.useState(NEW_PRODUCT_VALUE)
+  const productFromQuery = searchParams.get("product")
+  const initialProductId =
+    productFromQuery && products.some((product) => product.id === productFromQuery)
+      ? productFromQuery
+      : NEW_PRODUCT_VALUE
+  const [productId, setProductId] = React.useState(initialProductId)
+
+  React.useEffect(() => {
+    if (
+      productFromQuery &&
+      products.some((product) => product.id === productFromQuery)
+    ) {
+      setProductId(productFromQuery)
+    }
+  }, [productFromQuery, products])
 
   return (
     <div className="h-full min-h-0 overflow-y-auto">

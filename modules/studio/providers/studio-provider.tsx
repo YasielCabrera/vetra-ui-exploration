@@ -20,6 +20,9 @@ type StudioContextValue = {
   products: Product[]
   hydrated: boolean
   createSession: (prompt: string, productId?: string) => string
+  createProductSession: (productId: string) => string
+  startSession: (id: string, prompt: string) => void
+  deleteSession: (id: string) => void
   getSession: (id: string) => ChatSession | undefined
   getProduct: (id: string) => Product | undefined
   revealNextEvent: (id: string) => void
@@ -59,7 +62,7 @@ function loadSessions(): ChatSession[] {
     const raw = window.localStorage.getItem(STUDIO_STORAGE_KEY)
     if (!raw) return SEED_SESSIONS.map(withHydratedEvents)
     const parsed = JSON.parse(raw) as ChatSession[]
-    if (!Array.isArray(parsed) || parsed.length === 0) {
+    if (!Array.isArray(parsed)) {
       return SEED_SESSIONS.map(withHydratedEvents)
     }
     return parsed
@@ -160,6 +163,58 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const createProductSession = React.useCallback((productId: string) => {
+    const id = `session-${Date.now()}`
+    const now = new Date()
+    const session: ChatSession = {
+      id,
+      title: "New session",
+      prompt: "",
+      productId,
+      createdAt: now.toISOString(),
+      status: "idle",
+      messageCount: 0,
+      tokenCount: 0,
+      events: [],
+      revealedCount: 0,
+    }
+
+    setSessions((prev) => [session, ...prev])
+    return id
+  }, [])
+
+  const startSession = React.useCallback((id: string, prompt: string) => {
+    const title = titleFromPrompt(prompt)
+    const events = buildStreamEvents(prompt)
+    const now = new Date()
+
+    setSessions((prev) =>
+      prev.map((session) => {
+        if (session.id !== id) return session
+        return {
+          ...session,
+          title,
+          prompt,
+          status: "streaming",
+          messageCount: 1,
+          tokenCount: 0,
+          startedAt: now.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+          endedAt: undefined,
+          events,
+          revealedCount: 1,
+        }
+      }),
+    )
+  }, [])
+
+  const deleteSession = React.useCallback((id: string) => {
+    setSessions((prev) => prev.filter((session) => session.id !== id))
+  }, [])
+
   const getSession = React.useCallback(
     (id: string) => sessions.find((session) => session.id === id),
     [sessions],
@@ -207,6 +262,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
       products,
       hydrated,
       createSession,
+      createProductSession,
+      startSession,
+      deleteSession,
       getSession,
       getProduct,
       revealNextEvent,
@@ -216,6 +274,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
       products,
       hydrated,
       createSession,
+      createProductSession,
+      startSession,
+      deleteSession,
       getSession,
       getProduct,
       revealNextEvent,

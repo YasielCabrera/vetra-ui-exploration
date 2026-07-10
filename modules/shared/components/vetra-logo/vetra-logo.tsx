@@ -21,7 +21,7 @@ export function VetraLogo({ className, showWordmark = true }: VetraLogoProps) {
         />
       </svg>
       {showWordmark ? (
-        <span className="text-sm font-semibold tracking-tight text-foreground">
+        <span className="text-base font-semibold tracking-tight text-foreground">
           VETRA <span className="font-medium text-muted-foreground">Studio</span>
         </span>
       ) : null}

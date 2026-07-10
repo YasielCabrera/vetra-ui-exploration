@@ -113,7 +113,8 @@ function SessionChatPane({
 export function SessionView({ sessionId }: SessionViewProps) {
   const router = useRouter()
   const isMobile = useIsMobile()
-  const { getSession, revealNextEvent, createSession, products } = useStudio()
+  const { getSession, revealNextEvent, createSession, startSession, products } =
+    useStudio()
   const session = getSession(sessionId)
   const bottomRef = React.useRef<HTMLDivElement>(null)
   const [panelLayout, setPanelLayout] = React.useState<Layout | null>(null)
@@ -165,9 +166,14 @@ export function SessionView({ sessionId }: SessionViewProps) {
   const previewReady =
     session.status === "complete" ||
     session.status === "error" ||
+    session.status === "idle" ||
     session.revealedCount >= Math.max(session.events.length - 2, 1)
 
   const handleSubmit = (prompt: string, productId: string) => {
+    if (session.status === "idle") {
+      startSession(sessionId, prompt)
+      return
+    }
     const id = createSession(prompt, productId)
     router.push(`/session/${id}`)
   }
