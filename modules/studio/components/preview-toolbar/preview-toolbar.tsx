@@ -6,6 +6,7 @@ import {
   ExpandIcon,
   MonitorIcon,
   PaletteIcon,
+  PlusIcon,
   RefreshCwIcon,
   SmartphoneIcon,
   SquareMousePointerIcon,
@@ -18,8 +19,13 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/modules/shared/components/ui/dropdown-menu"
 import { Separator } from "@/modules/shared/components/ui/separator"
@@ -30,9 +36,43 @@ import {
 } from "@/modules/shared/components/ui/tooltip"
 import { cn } from "@/modules/shared/lib/utils"
 
-const PREVIEW_PAGES = ["Home", "Editor", "Settings"] as const
+const PREVIEW_SERVICES = ["Connect", "Switchboard"] as const
 
-type PreviewPage = (typeof PREVIEW_PAGES)[number]
+const PREVIEW_APPS = [
+  {
+    label: "User",
+    items: ["Profile", "Account", "Preferences"],
+  },
+  {
+    label: "Host",
+    items: ["Admin Host", "Tenant Host", "Public Host"],
+  },
+] as const
+
+const PREVIEW_EDITORS = [
+  {
+    label: "Menu",
+    items: ["Main Menu", "Sidebar Menu", "Context Menu"],
+  },
+  {
+    label: "Client",
+    items: ["Web Client", "Mobile Client", "Desktop Client"],
+  },
+  {
+    label: "Document",
+    items: ["Invoice Doc", "Contract Doc", "Report Doc"],
+  },
+  {
+    label: "Drive",
+    items: ["Team Drive", "Personal Drive", "Shared Drive"],
+  },
+] as const
+
+type PreviewPage =
+  | (typeof PREVIEW_SERVICES)[number]
+  | (typeof PREVIEW_APPS)[number]["items"][number]
+  | (typeof PREVIEW_EDITORS)[number]["items"][number]
+
 type PreviewDevice = "desktop" | "tablet" | "mobile"
 
 const DEVICE_LABELS: Record<PreviewDevice, string> = {
@@ -60,13 +100,27 @@ export function PreviewToolbar({
   onExpand,
   className,
 }: PreviewToolbarProps) {
-  const [page, setPage] = React.useState<PreviewPage>(pageProp ?? "Home")
+  const barRef = React.useRef<HTMLDivElement>(null)
+  const [barWidth, setBarWidth] = React.useState<number>()
+  const [page, setPage] = React.useState<PreviewPage>(pageProp ?? "Connect")
   const [device, setDevice] = React.useState<PreviewDevice>(
     deviceProp ?? "desktop",
   )
 
   const currentPage = pageProp ?? page
   const currentDevice = deviceProp ?? device
+
+  React.useEffect(() => {
+    const node = barRef.current
+    if (!node) return
+
+    const update = () => setBarWidth(node.offsetWidth)
+    update()
+
+    const observer = new ResizeObserver(update)
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
 
   const handlePageChange = (next: PreviewPage) => {
     if (pageProp === undefined) setPage(next)
@@ -130,7 +184,10 @@ export function PreviewToolbar({
         </Tooltip>
       </div>
 
-      <div className="mx-auto flex h-8 min-w-0 max-w-[250px] flex-1 items-center rounded-full bg-secondary px-0.5 @[360px]:px-1">
+      <div
+        ref={barRef}
+        className="mx-auto flex h-8 min-w-0 max-w-[250px] flex-1 items-center rounded-full bg-secondary px-0.5 @[360px]:px-1"
+      >
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -159,15 +216,72 @@ export function PreviewToolbar({
               <ChevronDownIcon data-icon="inline-end" className="shrink-0" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" className="min-w-36">
+          <DropdownMenuContent
+            align="center"
+            className="min-w-0"
+            style={barWidth ? { width: barWidth } : undefined}
+          >
             <DropdownMenuGroup>
-              {PREVIEW_PAGES.map((item) => (
+              <DropdownMenuLabel>Services</DropdownMenuLabel>
+              {PREVIEW_SERVICES.map((item) => (
                 <DropdownMenuItem
                   key={item}
                   onSelect={() => handlePageChange(item)}
                 >
                   {item}
                 </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Apps</DropdownMenuLabel>
+              {PREVIEW_APPS.map((app) => (
+                <DropdownMenuSub key={app.label}>
+                  <DropdownMenuSubTrigger>{app.label}</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem>
+                      <PlusIcon />
+                      Create New
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {app.items.map((item) => (
+                      <DropdownMenuItem
+                        key={item}
+                        onSelect={() => handlePageChange(item)}
+                      >
+                        {item}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              ))}
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Editors</DropdownMenuLabel>
+              {PREVIEW_EDITORS.map((editor) => (
+                <DropdownMenuSub key={editor.label}>
+                  <DropdownMenuSubTrigger>{editor.label}</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem>
+                      <PlusIcon />
+                      Create New
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    {editor.items.map((item) => (
+                      <DropdownMenuItem
+                        key={item}
+                        onSelect={() => handlePageChange(item)}
+                      >
+                        {item}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
               ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>
